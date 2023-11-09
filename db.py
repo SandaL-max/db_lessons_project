@@ -1,3 +1,4 @@
+"""Create connection to db"""
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase
@@ -16,11 +17,12 @@ engine = create_engine(
 engine.connect()
 
 class Base(DeclarativeBase):
-    pass
+    """Base model class"""
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():
+    """Return session object for working with db"""
     db = SessionLocal()
     try:
         yield db

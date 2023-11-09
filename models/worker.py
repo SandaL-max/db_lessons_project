@@ -1,3 +1,4 @@
+"""Module of Worker model"""
 import datetime
 
 from sqlalchemy import Integer, String, ForeignKey, DateTime
@@ -6,7 +7,10 @@ from sqlalchemy.orm import mapped_column
 
 from db import Base
 
+
 class Worker(Base):
+    """Worker model"""
+
     __tablename__ = "workers"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

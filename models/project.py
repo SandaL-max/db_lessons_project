@@ -1,3 +1,4 @@
+"""Module of Project model"""
 import datetime
 
 from sqlalchemy import Integer, String, ForeignKey, Date
@@ -6,7 +7,10 @@ from sqlalchemy.orm import mapped_column
 
 from db import Base
 
+
 class Project(Base):
+    """Project model"""
+
     __tablename__ = "projects"
 
     cipher: Mapped[int] = mapped_column(Integer, primary_key=True)

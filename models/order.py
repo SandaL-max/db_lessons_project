@@ -1,12 +1,16 @@
+"""Module of Order model"""
 import datetime
 
-from sqlalchemy import Integer, String, ForeignKey, DateTime
+from sqlalchemy import Integer, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
 from db import Base
 
+
 class Order(Base):
+    """Order model"""
+
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
