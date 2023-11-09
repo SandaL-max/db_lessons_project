@@ -18,8 +18,8 @@ class Worker(WorkerBase):
 
 class ProjectBase(BaseModel):
     name: str
-    end_date: datetime.datetime
-    coomplexity_level: int
+    end_date: datetime.date
+    complexity_level: int
 
 class ProjectCreate(ProjectBase):
     pass
@@ -32,9 +32,9 @@ class Project(ProjectBase):
 
 class OrderBase(BaseModel):
     id: int
-    start_date: datetime.datetime
-    deadline_date: datetime.datetime
-    real_end_date: datetime.datetime
+    start_date: datetime.date
+    deadline_date: datetime.date
+    real_end_date: datetime.date
     complexity_level: int
     project_id: int
     worker_id: int

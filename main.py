@@ -66,6 +66,32 @@ def get_project(id: int, db: Session = Depends(get_db)):
     return ProjectController.get_by_id(db, id)
 
 
+@app.post("/projects", tags=["Projects"], response_model=schemas.Project)
+async def create_project(
+    project_request: schemas.ProjectCreate, db: Session = Depends(get_db)
+):
+    return await ProjectController.create(db, project_request)
+
+@app.delete("/projects/{id}", tags=["Projects"])
+async def delete_worker(id: int, db: Session = Depends(get_db)):
+    await ProjectController.delete(db, id)
+    return f"Worker {id} deleted!"
+
+
+@app.put("/projects/{id}", tags=["Projects"], response_model=schemas.Project)
+async def update_worker(
+    id: int, project_request: schemas.ProjectCreate, db: Session = Depends(get_db)
+):
+    db_project = ProjectController.get_by_id(db, id)
+    if db_project:
+        update_project_encoded = jsonable_encoder(project_request)
+        db_project.name = update_project_encoded["name"]
+        db_project.end_date = update_project_encoded["end_date"]
+        db_project.complexity_level = update_project_encoded["complexity_level"]
+        return await ProjectController.update(db, db_project)
+    else:
+        raise HTTPException(status_code=400, detail="Item not found with the given ID")
+
 # Orders
 @app.get("/orders", tags=["Orders"])
 def get_orders(db: Session = Depends(get_db)):
