@@ -14,7 +14,7 @@ class Worker(WorkerBase):
     id: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ProjectBase(BaseModel):
     name: str
@@ -28,10 +28,9 @@ class Project(ProjectBase):
     cipher: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class OrderBase(BaseModel):
-    id: int
     start_date: datetime.date
     deadline_date: datetime.date
     real_end_date: datetime.date
@@ -46,4 +45,4 @@ class Order(OrderBase):
     id: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
