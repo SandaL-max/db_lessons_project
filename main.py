@@ -15,11 +15,13 @@ app.include_router(workers.router)
 app.include_router(projects.router)
 app.include_router(orders.router)
 
+
 # Testing
 @app.get("/", include_in_schema=False)
 async def docs_redirect():
     """Redirect from / to /docs"""
-    return RedirectResponse(url='/docs')
+    return RedirectResponse(url="/docs")
+
 
 if __name__ == "__main__":
     hostname = socket.gethostname()

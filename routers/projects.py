@@ -14,13 +14,25 @@ router = APIRouter()
 @router.get("/projects", tags=["Projects"], response_model=List[schemas.Project])
 def get_projects(db: Session = Depends(get_db)):
     """Get all projects"""
-    return ProjectController.all(db)
+    workers = ProjectController.all(db)
+    if workers and len(workers):
+        return workers
+    else:
+        raise HTTPException(
+            status_code=400, detail="Project are empty or don't exist"
+        )
 
 
 @router.get("/projects/{project_id}", tags=["Projects"], response_model=schemas.Project)
 def get_project(project_id: int, db: Session = Depends(get_db)):
     """Get project by project_id"""
-    return ProjectController.get_by_id(db, project_id)
+    worker = ProjectController.get_by_id(db, project_id)
+    if worker:
+        return worker
+    else:
+        raise HTTPException(
+            status_code=400, detail="Project not found with the given project_id"
+        )
 
 
 @router.post("/projects", tags=["Projects"], response_model=schemas.Project)
@@ -28,7 +40,13 @@ async def create_project(
     project_request: schemas.ProjectCreate, db: Session = Depends(get_db)
 ):
     """Create project with input data"""
-    return await ProjectController.create(db, project_request)
+    worker = await ProjectController.create(db, project_request)
+    if worker:
+        return worker
+    else:
+        raise HTTPException(
+            status_code=400, detail="Can't create project"
+        )
 
 
 @router.delete("/projects/{project_id}", tags=["Projects"])

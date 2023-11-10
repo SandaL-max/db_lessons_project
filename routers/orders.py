@@ -14,13 +14,25 @@ router = APIRouter()
 @router.get("/orders", tags=["Orders"], response_model=List[schemas.Order])
 def get_orders(db: Session = Depends(get_db)):
     """Get all orders"""
-    return OrderController.all(db)
+    orders = OrderController.all(db)
+    if orders and len(orders) > 0:
+        return orders
+    else:
+        raise HTTPException(
+            status_code=400, detail="Orders are empty or don't exist"
+        )
 
 
 @router.get("/orders/{order_id}", tags=["Orders"], response_model=schemas.Order)
 def get_order(order_id: int, db: Session = Depends(get_db)):
     """Get order by order_id"""
-    return OrderController.get_by_id(db, order_id)
+    order = OrderController.get_by_id(db, order_id)
+    if order:
+        return order
+    else:
+        raise HTTPException(
+            status_code=400, detail="Order not found with the given order_id"
+        )
 
 
 @router.post("/orders", tags=["Orders"], response_model=schemas.Order)
@@ -28,7 +40,13 @@ async def create_order(
     order_request: schemas.OrderCreate, db: Session = Depends(get_db)
 ):
     """Create order with input data"""
-    return await OrderController.create(db, order_request)
+    worker = await OrderController.create(db, order_request)
+    if worker:
+        return worker
+    else:
+        raise HTTPException(
+            status_code=400, detail="Can't create order"
+        )
 
 
 @router.delete("/orders/{order_id}", tags=["Orders"])
