@@ -19,6 +19,11 @@ class WorkerController:
         return db.query(Worker).get(id_)
 
     @staticmethod
+    def get_by_name(db: Session, name: str):
+        """Get worker by name"""
+        return db.query(Worker).filter(Worker.full_name == name).first()
+
+    @staticmethod
     async def create(db: Session, worker: WorkerCreate):
         """Create Worker"""
         db_worker = Worker(full_name=worker.full_name, post=worker.post)

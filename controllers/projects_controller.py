@@ -19,6 +19,11 @@ class ProjectController:
         return db.query(Project).get(id_)
 
     @staticmethod
+    def get_by_name(db: Session, name: str):
+        """Get project by name"""
+        return db.query(Project).filter(Project.name == name).first()
+
+    @staticmethod
     async def create(db: Session, project: ProjectCreate):
         """Create Project"""
         db_project = Project(
