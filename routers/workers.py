@@ -29,6 +29,7 @@ async def get_worker(
     worker_name: str | None = None,
     db: Session = Depends(get_db),
 ):
+    """Get accurate worker"""
     if worker_id is not None:
         worker = await WorkerService.get_by_id(db, worker_id)
         if worker:

@@ -31,3 +31,9 @@ class TestService:
                 }
             )
         return result
+    
+    
+    @staticmethod
+    async def get_orders_count_for_workers(db: Session):
+        """Get orders count for workers"""
+        data = 
