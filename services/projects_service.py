@@ -5,8 +5,8 @@ from models.project import Project
 from schemas import ProjectCreate
 
 
-class ProjectController:
-    """Project controller"""
+class ProjectService:
+    """Project Service"""
 
     @staticmethod
     def all(db: Session):

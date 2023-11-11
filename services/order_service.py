@@ -5,8 +5,8 @@ from models.order import Order
 from schemas import OrderCreate
 
 
-class OrderController:
-    """Order Controller"""
+class OrderService:
+    """Order Service"""
 
     @staticmethod
     def all(db: Session):

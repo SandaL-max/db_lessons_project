@@ -5,21 +5,21 @@ from models.worker import Worker
 from schemas import WorkerCreate
 
 
-class WorkerController:
-    """Worker controller"""
+class WorkerService:
+    """Worker Service"""
 
     @staticmethod
-    def all(db: Session):
+    async def all(db: Session):
         """Get all workers"""
         return db.query(Worker).order_by(Worker.id).all()
 
     @staticmethod
-    def get_by_id(db: Session, id_: int):
+    async def get_by_id(db: Session, id_: int):
         """Get worker by id"""
         return db.query(Worker).get(id_)
 
     @staticmethod
-    def get_by_name(db: Session, name: str):
+    async def get_by_name(db: Session, name: str):
         """Get worker by name"""
         return db.query(Worker).filter(Worker.full_name == name).first()
 

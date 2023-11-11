@@ -16,10 +16,13 @@ engine = create_engine(
 )
 engine.connect()
 
+
 class Base(DeclarativeBase):
     """Base model class"""
 
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 def get_db():
     """Return session object for working with db"""

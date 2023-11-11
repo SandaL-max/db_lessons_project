@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
 from db import engine, Base
-from routers import workers, projects, orders
+from routers import workers, projects, orders, test
 
 app = FastAPI()
 
@@ -14,6 +14,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(workers.router)
 app.include_router(projects.router)
 app.include_router(orders.router)
+app.include_router(test.router)
 
 
 # Testing
