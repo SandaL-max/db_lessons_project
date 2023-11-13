@@ -35,3 +35,33 @@ async def update_workers(new_post: str, db: Session = Depends(get_db)):
     """Update post of workers, whose real end date is less than deadline date"""
     await TestService.update_post(db, new_post)
     return "Workers are updated"
+
+
+@router.get("/test/generate_workers/{quantity}", tags=["Generators"])
+async def generate_workers_by_quantity(quantity: int, db: Session = Depends(get_db)):
+    """Generate some workers"""
+    return await TestService.generate_workers_by_quantity(db, quantity)
+
+
+@router.get("/test/generate_projects/{quantity}", tags=["Generators"])
+async def generate_projects_by_quantity(quantity: int, db: Session = Depends(get_db)):
+    """Generate some projects"""
+    return await TestService.generate_projects_by_quantity(db, quantity)
+
+
+@router.get("/test/generate_orders/{quantity}", tags=["Generators"])
+async def generate_orders_by_quantity(
+    quantity: int,
+    project_id_start: int,
+    project_id_end: int,
+    worker_id_start: int,
+    worker_id_end: int,
+    db: Session = Depends(get_db),
+):
+    """Generate some workers"""
+    return await TestService.generate_orders_by_quantity(
+        db,
+        quantity,
+        tuple(project_id_start, project_id_end),
+        tuple(worker_id_start, worker_id_end),
+    )
