@@ -16,7 +16,8 @@ class Worker(Base):
     __tablename__ = "workers"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    full_name: Mapped[str] = mapped_column(String(50))
-    post: Mapped[str] = mapped_column(String(50))
+    full_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    post: Mapped[str] = mapped_column(String(50), nullable=False)
+    salary: Mapped[int] = mapped_column(Integer, nullable=False)
 
     orders: Mapped[List["Order"]] = relationship()
