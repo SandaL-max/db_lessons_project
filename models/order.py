@@ -1,7 +1,7 @@
 """Module of Order model"""
 import datetime
 
-from sqlalchemy import Integer, ForeignKey, DateTime
+from sqlalchemy import Integer, ForeignKey, DateTime, String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 

@@ -3,18 +3,16 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy_utils import database_exists, create_database
 from dotenv import load_dotenv
 
 load_dotenv()
-DB = os.getenv("DB")
-DB_NAME = os.getenv("DB_NAME")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-
-engine = create_engine(
-    f"{DB}+psycopg2://{DB_USER}:{DB_PASSWORD}@localhost/{DB_NAME}", echo=False
-)
-engine.connect()
+DB_URI = os.getenv("DB_URI")
+engine = create_engine(DB_URI, echo=False)
+if not database_exists(engine.url):
+    create_database(engine.url)
+else:
+    engine.connect()
 
 
 class Base(DeclarativeBase):
