@@ -60,6 +60,8 @@ async def update_order(
     db_order = OrderService.get_by_id(db, order_id)
     if db_order:
         update_order_encoded = jsonable_encoder(order_request)
+        db_order.name = update_order_encoded["name"]
+        db_order.description = update_order_encoded["description"]
         db_order.start_date = update_order_encoded["start_date"]
         db_order.deadline_date = update_order_encoded["deadline_date"]
         db_order.real_end_date = update_order_encoded["real_end_date"]

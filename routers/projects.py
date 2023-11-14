@@ -18,9 +18,7 @@ def get_projects(db: Session = Depends(get_db)):
     if workers and len(workers):
         return workers
     else:
-        raise HTTPException(
-            status_code=400, detail="Project are empty or don't exist"
-        )
+        raise HTTPException(status_code=400, detail="Project are empty or don't exist")
 
 
 @router.get("/projects/{project_id}", tags=["Projects"], response_model=schemas.Project)
@@ -44,9 +42,7 @@ async def create_project(
     if worker:
         return worker
     else:
-        raise HTTPException(
-            status_code=400, detail="Can't create project"
-        )
+        raise HTTPException(status_code=400, detail="Can't create project")
 
 
 @router.delete("/projects/{project_id}", tags=["Projects"])
@@ -67,6 +63,7 @@ async def update_project(
     if db_project:
         update_project_encoded = jsonable_encoder(project_request)
         db_project.name = update_project_encoded["name"]
+        db_project.description = update_project_encoded["description"]
         db_project.end_date = update_project_encoded["end_date"]
         db_project.complexity_level = update_project_encoded["complexity_level"]
         return await ProjectService.update(db, db_project)

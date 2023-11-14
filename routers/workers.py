@@ -77,6 +77,7 @@ async def update_worker(
         update_worker_encoded = jsonable_encoder(worker_request)
         db_worker.full_name = update_worker_encoded["full_name"]
         db_worker.post = update_worker_encoded["post"]
+        db_worker.salary = update_worker_encoded["salary"]
         return await WorkerService.update(db, db_worker)
     else:
         raise HTTPException(
