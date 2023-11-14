@@ -12,9 +12,14 @@ router = APIRouter()
 
 
 @router.get("/orders", tags=["Orders"], response_model=List[schemas.Order])
-def get_orders(db: Session = Depends(get_db)):
+async def get_orders(
+    per_page: int = 10,
+    page: int = 0,
+    order_by: str = "id",
+    db: Session = Depends(get_db),
+):
     """Get all orders"""
-    orders = OrderService.all(db)
+    orders = await OrderService.all(db, per_page, page, order_by)
     if orders and len(orders) > 0:
         return orders
     else:
@@ -22,9 +27,9 @@ def get_orders(db: Session = Depends(get_db)):
 
 
 @router.get("/orders/{order_id}", tags=["Orders"], response_model=schemas.Order)
-def get_order(order_id: int, db: Session = Depends(get_db)):
+async def get_order(order_id: int, db: Session = Depends(get_db)):
     """Get order by order_id"""
-    order = OrderService.get_by_id(db, order_id)
+    order = await OrderService.get_by_id(db, order_id)
     if order:
         return order
     else:

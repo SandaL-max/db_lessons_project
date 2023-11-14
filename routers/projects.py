@@ -12,17 +12,24 @@ router = APIRouter()
 
 
 @router.get("/projects", tags=["Projects"], response_model=List[schemas.Project])
-def get_projects(db: Session = Depends(get_db)):
+async def get_projects(
+    per_page: int = 10,
+    page: int = 0,
+    order_by: str = "cipher",
+    db: Session = Depends(get_db),
+):
     """Get all projects"""
-    workers = ProjectService.all(db)
-    if workers and len(workers):
-        return workers
+    projects = await ProjectService.all(db, per_page, page, order_by)
+    if projects and len(projects) > 0:
+        return projects
     else:
-        raise HTTPException(status_code=400, detail="Project are empty or don't exist")
+        raise HTTPException(
+            status_code=400, detail="Projects are empty or doesn't exist"
+        )
 
 
 @router.get("/projects/{project_id}", tags=["Projects"], response_model=schemas.Project)
-def get_project(project_id: int, db: Session = Depends(get_db)):
+async def get_project(project_id: int, db: Session = Depends(get_db)):
     """Get project by project_id"""
     worker = ProjectService.get_by_id(db, project_id)
     if worker:

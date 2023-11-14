@@ -12,13 +12,14 @@ class TestService:
     """Test Service"""
 
     @staticmethod
-    async def get_join_of_workers_and_orders(db: Session):
+    async def get_join_of_workers_and_orders(db: Session, per_page: int, page: int):
         """Get join of workers and orders"""
         data = (
             db.query(Worker)
             .join(Order)
             .filter(Worker.id == Order.worker_id)
             .order_by(Worker.id)
+            .slice(page * per_page, page * per_page + per_page)
             .all()
         )
         result = []
@@ -28,21 +29,22 @@ class TestService:
                     "id": worker.id,
                     "full_name": worker.full_name,
                     "post": worker.post,
+                    "salary": worker.salary,
                     "orders": worker.orders,
                 }
             )
         return result
 
     @staticmethod
-    async def get_orders_count_for_workers(db: Session):
+    async def get_orders_count_for_workers(db: Session, per_page: int, page: int):
         """Get orders count for workers"""
         data = (
             # pylint: disable-next=E1102
             db.query(Worker, func.count(Worker.orders).label("order_count"))
             .join(Order)
             .group_by(Worker.id)
+            .slice(page * per_page, page * per_page + per_page)
         )
-        print(data)
         result = []
         for worker in data:
             result.append(
@@ -50,20 +52,27 @@ class TestService:
                     "id": worker[0].id,
                     "full_name": worker[0].full_name,
                     "post": worker[0].post,
+                    "salary": worker[0].salary,
                     "orders_count": worker[1],
                 }
             )
         return result
 
     @staticmethod
-    async def get_workers_with_complexity_level(db: Session, complexity_level: int):
+    async def get_workers_with_complexity_level(
+        db: Session, complexity_level: int, per_page: int, page: int
+    ):
         """Get workers with given comlexity level or bigger than that"""
         subquery = (
             db.query(Order.worker_id)
             .filter(Order.complexity_level >= complexity_level)
             .subquery()
         )
-        query = db.query(Worker).filter(Worker.id.in_(select(subquery)))
+        query = (
+            db.query(Worker)
+            .filter(Worker.id.in_(select(subquery)))
+            .slice(page * per_page, page * per_page + per_page)
+        )
         result = []
         for worker in query:
             result.append(
@@ -71,6 +80,7 @@ class TestService:
                     "id": worker.id,
                     "full_name": worker.full_name,
                     "post": worker.post,
+                    "salary": worker.salary,
                 }
             )
         return result
@@ -116,3 +126,9 @@ class TestService:
         db.add_all(data)
         db.commit()
         return "Create orders was successful"
+
+    @staticmethod
+    async def get_salary_median(db: Session):
+        """Get median of workers salary"""
+        data = db.query(func.round(func.avg(Worker.salary))).scalar()
+        return data

@@ -9,9 +9,22 @@ class WorkerService:
     """Worker Service"""
 
     @staticmethod
-    async def all(db: Session):
+    async def all(db: Session, per_page: int, page: int, order_by: str):
         """Get all workers"""
-        return db.query(Worker).order_by(Worker.id).all()
+        if order_by == "id":
+            order_obj = Worker.id
+        elif order_by == "name":
+            order_obj = Worker.full_name
+        elif order_by == "salary":
+            order_obj = Worker.salary
+        else:
+            order_obj = Worker.id
+        return (
+            db.query(Worker)
+            .order_by(order_obj)
+            .slice(page * per_page, page * per_page + per_page)
+            .all()
+        )
 
     @staticmethod
     async def get_by_id(db: Session, id_: int):

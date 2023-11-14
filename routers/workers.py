@@ -12,9 +12,14 @@ router = APIRouter()
 
 
 @router.get("/workers", tags=["Workers"], response_model=List[schemas.Worker])
-async def get_workers(db: Session = Depends(get_db)):
+async def get_workers(
+    per_page: int = 10,
+    page: int = 0,
+    order_by: str = "id",
+    db: Session = Depends(get_db),
+):
     """Get all workers"""
-    workers = await WorkerService.all(db)
+    workers = await WorkerService.all(db, per_page, page, order_by)
     if workers and len(workers) > 0:
         return workers
     else:

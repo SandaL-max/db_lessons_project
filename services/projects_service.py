@@ -9,17 +9,30 @@ class ProjectService:
     """Project Service"""
 
     @staticmethod
-    def all(db: Session):
+    async def all(db: Session, per_page: int, page: int, order_by: str):
         """Get all projects"""
-        return db.query(Project).order_by(Project.cipher).all()
+        if order_by == "cipher":
+            order_obj = Project.cipher
+        elif order_by == "name":
+            order_obj = Project.name
+        elif order_by == "complexity_level":
+            order_obj = Project.complexity_level
+        else:
+            order_obj = Project.cipher
+        return (
+            db.query(Project)
+            .order_by(order_obj)
+            .slice(page * per_page, page * per_page + per_page)
+            .all()
+        )
 
     @staticmethod
-    def get_by_id(db: Session, id_: int):
+    async def get_by_id(db: Session, id_: int):
         """Get project by id"""
         return db.query(Project).get(id_)
 
     @staticmethod
-    def get_by_name(db: Session, name: str):
+    async def get_by_name(db: Session, name: str):
         """Get project by name"""
         return db.query(Project).filter(Project.name == name).first()
 

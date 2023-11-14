@@ -9,12 +9,27 @@ class OrderService:
     """Order Service"""
 
     @staticmethod
-    def all(db: Session):
+    async def all(db: Session, per_page: int, page: int, order_by: str):
         """Get all orders"""
-        return db.query(Order).order_by(Order.id).all()
+        if order_by == "id":
+            order_obj = Order.id
+        elif order_by == "name":
+            order_obj = Order.name
+        elif order_by == "start_date":
+            order_obj = Order.start_date
+        elif order_by == "complexity_level":
+            order_obj = Order.complexity_level
+        else:
+            order_obj = Order.id
+        return (
+            db.query(Order)
+            .order_by(order_obj)
+            .slice(page * per_page, page * per_page + per_page)
+            .all()
+        )
 
     @staticmethod
-    def get_by_id(db: Session, id_: int):
+    async def get_by_id(db: Session, id_: int):
         """Get order by id"""
         return db.query(Order).get(id_)
 
