@@ -62,6 +62,6 @@ async def generate_orders_by_quantity(
     return await TestService.generate_orders_by_quantity(
         db,
         quantity,
-        tuple(project_id_start, project_id_end),
-        tuple(worker_id_start, worker_id_end),
+        (project_id_start, project_id_end),
+        (worker_id_start, worker_id_end),
     )

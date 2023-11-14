@@ -14,7 +14,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     description: Mapped[str] = mapped_column(Text)
     start_date: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False)
     deadline_date: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False)

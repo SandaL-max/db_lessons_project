@@ -22,6 +22,8 @@ class OrderService:
     async def create(db: Session, order: OrderCreate):
         """Create order"""
         db_order = Order(
+            name=order.name,
+            description=order.description,
             start_date=order.start_date,
             deadline_date=order.deadline_date,
             real_end_date=order.real_end_date,

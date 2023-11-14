@@ -16,7 +16,7 @@ class Project(Base):
     __tablename__ = "projects"
 
     cipher: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     description: Mapped[str] = mapped_column(Text)
     end_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     complexity_level: Mapped[int] = mapped_column(Integer)

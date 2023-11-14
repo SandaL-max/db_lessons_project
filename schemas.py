@@ -9,6 +9,7 @@ class WorkerBase(BaseModel):
 
     full_name: str
     post: str
+    salary: int
 
 
 class WorkerCreate(WorkerBase):
@@ -30,6 +31,7 @@ class ProjectBase(BaseModel):
     """Base of project"""
 
     name: str
+    description: str
     end_date: datetime.date
     complexity_level: int
 
@@ -52,6 +54,8 @@ class Project(ProjectBase):
 class OrderBase(BaseModel):
     """Base of order"""
 
+    name: str
+    description: str
     start_date: datetime.date
     deadline_date: datetime.date
     real_end_date: datetime.date

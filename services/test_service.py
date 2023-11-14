@@ -92,18 +92,16 @@ class TestService:
     async def generate_workers_by_quantity(db: Session, quantity: int):
         """Generate some workers"""
         data = await generate_workers(quantity)
-        for worker in data:
-            db.add(worker)
-            db.commit()
+        db.add_all(data)
+        db.commit()
         return "Create workers was successful"
 
     @staticmethod
     async def generate_projects_by_quantity(db: Session, quantity: int):
         """Generate some projects"""
         data = await generate_projects(quantity)
-        for project in data:
-            db.add(project)
-            db.commit()
+        db.add_all(data)
+        db.commit()
         return "Create projects was successful"
 
     @staticmethod
@@ -115,7 +113,6 @@ class TestService:
     ):
         """Generate some workers"""
         data = await generate_orders(quantity, project_id_range, worker_id_range)
-        for order in data:
-            db.add(order)
-            db.commit()
+        db.add_all(data)
+        db.commit()
         return "Create orders was successful"

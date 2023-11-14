@@ -26,7 +26,11 @@ class WorkerService:
     @staticmethod
     async def create(db: Session, worker: WorkerCreate):
         """Create Worker"""
-        db_worker = Worker(full_name=worker.full_name, post=worker.post)
+        db_worker = Worker(
+            full_name=worker.full_name,
+            post=worker.post,
+            salary=worker.salary,
+        )
         db.add(db_worker)
         db.commit()
         db.refresh(db_worker)

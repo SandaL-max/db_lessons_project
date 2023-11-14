@@ -28,6 +28,7 @@ class ProjectService:
         """Create Project"""
         db_project = Project(
             name=project.name,
+            description=project.description,
             end_date=project.end_date,
             complexity_level=project.complexity_level,
         )
