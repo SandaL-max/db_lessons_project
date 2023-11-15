@@ -1,6 +1,6 @@
 """Test router"""
 from sqlalchemy.orm import Session
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, HTTPException
 from db import get_db
 from services.test_service import TestService
 
@@ -15,7 +15,10 @@ async def get_join(
 ):
     """get join of workers and orders"""
     data = await TestService.get_join_of_workers_and_orders(db, per_page, page)
-    return data
+    if data:
+        return data
+    else:
+        raise HTTPException(status_code=400, detail="Join is empty or doesn't exist")
 
 
 @router.get("/test/count", tags=["Test"])
@@ -26,7 +29,10 @@ async def get_orders_count(
 ):
     """get orders count"""
     data = await TestService.get_orders_count_for_workers(db, per_page, page)
-    return data
+    if data:
+        return data
+    else:
+        raise HTTPException(status_code=400, detail="Workers with orders don't exist")
 
 
 @router.get("/test/comlexity_level", tags=["Test"])
@@ -37,8 +43,16 @@ async def get_workers_with_complexity_level(
     db: Session = Depends(get_db),
 ):
     """get workers with given comlexity level or bigger than that"""
-    data = await TestService.get_workers_with_complexity_level(db, complexity_level, per_page, page)
-    return data
+    data = await TestService.get_workers_with_complexity_level(
+        db, complexity_level, per_page, page
+    )
+    if data:
+        return data
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="Workers with given complexity level are empty or doesn't exist",
+        )
 
 
 @router.get("/test/update", tags=["Test"])
@@ -81,4 +95,11 @@ async def generate_orders_by_quantity(
 @router.get("/test/get_median_of_salaries", tags=["Test"])
 async def get_salary_median(db: Session = Depends(get_db)):
     """Get median of salaries"""
-    return await TestService.get_salary_median(db)
+    data = await TestService.get_salary_median(db)
+    if data:
+        return data
+    else:
+        raise HTTPException(
+            status_code=500,
+            detail="Something went wrong when median has calculated",
+        )
