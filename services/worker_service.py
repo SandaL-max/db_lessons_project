@@ -1,4 +1,5 @@
 """Module of Worker controller"""
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.worker import Worker
 
@@ -61,3 +62,20 @@ class WorkerService:
         updated_worker = db.merge(worker_data)
         db.commit()
         return updated_worker
+
+    @staticmethod
+    async def search(db: Session, pattern: str):
+        """Search worker with trigramm method"""
+        # pylint: disable-next=E1102
+        columns = func.coalesce(Worker.full_name, "").concat(
+            # pylint: disable-next=E1102
+            func.coalesce(Worker.post, "")
+        )
+        columns = columns.self_group()
+        data = (
+            db.query(Worker)
+            .where(columns.bool_op("%")(pattern))
+            .order_by(func.similarity(columns, pattern).desc())
+            .all()
+        )
+        return data

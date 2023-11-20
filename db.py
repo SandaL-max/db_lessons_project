@@ -1,8 +1,10 @@
 """Create connection to db"""
 import os
+from typing import Any
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy_utils import database_exists, create_database
 from dotenv import load_dotenv
 
@@ -17,6 +19,8 @@ else:
 
 class Base(DeclarativeBase):
     """Base model class"""
+
+    type_annotation_map = {dict[str, Any]: JSONB}
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

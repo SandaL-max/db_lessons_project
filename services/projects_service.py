@@ -1,4 +1,5 @@
 """Module of Project controller"""
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.project import Project
 
@@ -62,3 +63,20 @@ class ProjectService:
         updated_project = db.merge(project_data)
         db.commit()
         return updated_project
+
+    @staticmethod
+    async def search(db: Session, pattern: str):
+        """Search project with trigramm method"""
+        # pylint: disable-next=E1102
+        columns = func.coalesce(Project.name, "").concat(
+            # pylint: disable-next=E1102
+            func.coalesce(Project.description, "")
+        )
+        columns = columns.self_group()
+        data = (
+            db.query(Project)
+            .where(columns.bool_op("%")(pattern))
+            .order_by(func.similarity(columns, pattern).desc())
+            .all()
+        )
+        return data

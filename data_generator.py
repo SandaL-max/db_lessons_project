@@ -9,10 +9,14 @@ fake = Faker()
 
 async def generate_worker():
     """Generate one worker"""
+    worker = fake.simple_profile()
+    worker["post"] = fake.job()
+    worker["salary"] = fake.random_int(min=30000, max=100000)
     return Worker(
-        full_name=fake.name(),
-        post=fake.job(),
-        salary=fake.random_int(min=30000, max=100000),
+        full_name=worker["name"],
+        post=worker["post"],
+        salary=worker["salary"],
+        details=worker,
     )
 
 

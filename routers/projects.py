@@ -78,3 +78,9 @@ async def update_project(
         raise HTTPException(
             status_code=400, detail="Project not found with the given project_id"
         )
+
+
+@router.get("/projects/search/{pattern}", tags=["Projects"])
+async def workers_search(pattern: str, db: Session = Depends(get_db)):
+    """Get searched projects"""
+    return await ProjectService.search(db, pattern)

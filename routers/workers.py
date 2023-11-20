@@ -88,3 +88,9 @@ async def update_worker(
         raise HTTPException(
             status_code=400, detail="Worker not found with the given id"
         )
+
+
+@router.get("/workers/search/{pattern}", tags=["Workers"])
+async def workers_search(pattern: str, db: Session = Depends(get_db)):
+    """Get searched workers"""
+    return await WorkerService.search(db, pattern)

@@ -1,8 +1,8 @@
 """Module of Worker model"""
-import datetime
-from typing import List
+from typing import List, Optional, Any
 
-from sqlalchemy import Integer, String, ForeignKey, DateTime
+from sqlalchemy import Integer, String, func, Index
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -16,8 +16,21 @@ class Worker(Base):
     __tablename__ = "workers"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    full_name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    full_name: Mapped[str] = mapped_column(String(255), nullable=False)
     post: Mapped[str] = mapped_column(String(255), nullable=False)
+    details: Mapped[dict[str, Any]] = mapped_column(
+        JSONB(none_as_null=True), nullable=False
+    )
     salary: Mapped[int] = mapped_column(Integer, nullable=False)
 
     orders: Mapped[List["Order"]] = relationship()
+
+    index = Index(
+        "workers_details_idx",
+        # pylint: disable-next=E1102
+        func.coalesce(full_name, "").concat(func.coalesce(post, "")).label("columns"),
+        postgresql_using="gin",
+        postgresql_ops={
+            "columns": "gin_trgm_ops",
+        },
+    )

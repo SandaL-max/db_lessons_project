@@ -1,6 +1,7 @@
 """Store schemas for all models"""
 import datetime
 
+from typing import Any
 from pydantic import BaseModel
 
 
@@ -10,6 +11,7 @@ class WorkerBase(BaseModel):
     full_name: str
     post: str
     salary: int
+    details: dict[str, Any]
 
 
 class WorkerCreate(WorkerBase):
