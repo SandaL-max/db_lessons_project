@@ -94,3 +94,15 @@ async def update_worker(
 async def workers_search(pattern: str, db: Session = Depends(get_db)):
     """Get searched workers"""
     return await WorkerService.search(db, pattern)
+
+
+@router.get("/workers/regex/{pattern}", tags=["Workers"])
+async def get_worker_by_regex_in_details(
+    pattern: str,
+    key_name: str = "name",
+    per_page: int = 10,
+    page: int = 0,
+    db: Session = Depends(get_db),
+):
+    """Get worker by regex in details"""
+    return await WorkerService.regex_by_details(db, key_name, pattern, per_page, page)

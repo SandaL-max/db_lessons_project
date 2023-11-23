@@ -27,10 +27,10 @@ class Worker(Base):
 
     index = Index(
         "workers_details_idx",
-        # pylint: disable-next=E1102
-        func.coalesce(full_name, "").concat(func.coalesce(post, "")).label("columns"),
+        details,
+        unique=False,
         postgresql_using="gin",
         postgresql_ops={
-            "columns": "gin_trgm_ops",
+            "json_details": "jsonb_path_ops",
         },
     )

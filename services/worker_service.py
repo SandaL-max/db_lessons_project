@@ -1,4 +1,5 @@
 """Module of Worker controller"""
+from typing import List, Any
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.worker import Worker
@@ -10,7 +11,7 @@ class WorkerService:
     """Worker Service"""
 
     @staticmethod
-    async def all(db: Session, per_page: int, page: int, order_by: str):
+    async def all(db: Session, per_page: int, page: int, order_by: str) -> List[Worker]:
         """Get all workers"""
         if order_by == "id":
             order_obj = Worker.id
@@ -28,17 +29,17 @@ class WorkerService:
         )
 
     @staticmethod
-    async def get_by_id(db: Session, id_: int):
+    async def get_by_id(db: Session, id_: int) -> Any | None:
         """Get worker by id"""
         return db.query(Worker).get(id_)
 
     @staticmethod
-    async def get_by_name(db: Session, name: str):
+    async def get_by_name(db: Session, name: str) -> Worker | None:
         """Get worker by name"""
         return db.query(Worker).filter(Worker.full_name == name).first()
 
     @staticmethod
-    async def create(db: Session, worker: WorkerCreate):
+    async def create(db: Session, worker: WorkerCreate) -> Worker:
         """Create Worker"""
         db_worker = Worker(
             full_name=worker.full_name,
@@ -51,7 +52,7 @@ class WorkerService:
         return db_worker
 
     @staticmethod
-    async def delete(db: Session, id_: int):
+    async def delete(db: Session, id_: int) -> None:
         """Delete Worker"""
         db.delete(db.query(Worker).get(id_))
         db.commit()
@@ -64,7 +65,7 @@ class WorkerService:
         return updated_worker
 
     @staticmethod
-    async def search(db: Session, pattern: str):
+    async def search(db: Session, pattern: str) -> List[Worker]:
         """Search worker with trigramm method"""
         # pylint: disable-next=E1102
         columns = func.coalesce(Worker.full_name, "").concat(
@@ -79,3 +80,23 @@ class WorkerService:
             .all()
         )
         return data
+
+    @staticmethod
+    async def regex_by_details(
+        db: Session,
+        key_name: str,
+        pattern: str,
+        per_page: int,
+        page: int,
+    ) -> List[Worker] | None:
+        """Get worker by given details column data"""
+        if key_name == "":
+            return None
+        else:
+            return (
+                db.query(Worker)
+                .filter(Worker.details[key_name].astext.match(pattern))
+                .order_by(Worker.details[key_name].astext)
+                .slice(page * per_page, page * per_page + per_page)
+                .all()
+            )

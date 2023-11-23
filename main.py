@@ -7,7 +7,7 @@ from fastapi.responses import RedirectResponse
 from db import engine, Base
 from routers import workers, projects, orders, test
 
-app = FastAPI+()
+app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
