@@ -1,7 +1,7 @@
 """Module of Worker model"""
-from typing import List, Optional, Any
+from typing import List, Any
 
-from sqlalchemy import Integer, String, func, Index
+from sqlalchemy import Integer, String, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
