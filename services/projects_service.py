@@ -1,4 +1,5 @@
 """Module of Project controller"""
+from typing import List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.project import Project
@@ -10,7 +11,9 @@ class ProjectService:
     """Project Service"""
 
     @staticmethod
-    async def all(db: Session, per_page: int, page: int, order_by: str):
+    async def all(
+        db: Session, per_page: int, page: int, order_by: str
+    ) -> List[Project]:
         """Get all projects"""
         if order_by == "cipher":
             order_obj = Project.cipher
@@ -28,17 +31,17 @@ class ProjectService:
         )
 
     @staticmethod
-    async def get_by_id(db: Session, id_: int):
+    async def get_by_id(db: Session, id_: int) -> Project | None:
         """Get project by id"""
         return db.query(Project).get(id_)
 
     @staticmethod
-    async def get_by_name(db: Session, name: str):
+    async def get_by_name(db: Session, name: str) -> Project | None:
         """Get project by name"""
         return db.query(Project).filter(Project.name == name).first()
 
     @staticmethod
-    async def create(db: Session, project: ProjectCreate):
+    async def create(db: Session, project: ProjectCreate) -> Project:
         """Create Project"""
         db_project = Project(
             name=project.name,
@@ -52,20 +55,20 @@ class ProjectService:
         return db_project
 
     @staticmethod
-    async def delete(db: Session, id_: int):
+    async def delete(db: Session, id_: int) -> None:
         """Delete Project"""
         db.delete(db.query(Project).get(id_))
         db.commit()
 
     @staticmethod
-    async def update(db: Session, project_data):
+    async def update(db: Session, project_data) -> Project:
         """Update Project"""
         updated_project = db.merge(project_data)
         db.commit()
         return updated_project
 
     @staticmethod
-    async def search(db: Session, pattern: str):
+    async def search(db: Session, pattern: str) -> List[Project]:
         """Search project with trigramm method"""
         # pylint: disable-next=E1102
         columns = func.coalesce(Project.name, "").concat(

@@ -1,4 +1,5 @@
 """Module of Order Controller"""
+from typing import List
 from sqlalchemy.orm import Session
 from models.order import Order
 
@@ -9,7 +10,7 @@ class OrderService:
     """Order Service"""
 
     @staticmethod
-    async def all(db: Session, per_page: int, page: int, order_by: str):
+    async def all(db: Session, per_page: int, page: int, order_by: str) -> List[Order]:
         """Get all orders"""
         if order_by == "id":
             order_obj = Order.id
@@ -29,12 +30,12 @@ class OrderService:
         )
 
     @staticmethod
-    async def get_by_id(db: Session, id_: int):
+    async def get_by_id(db: Session, id_: int) -> Order | None:
         """Get order by id"""
         return db.query(Order).get(id_)
 
     @staticmethod
-    async def create(db: Session, order: OrderCreate):
+    async def create(db: Session, order: OrderCreate) -> Order:
         """Create order"""
         db_order = Order(
             name=order.name,
@@ -52,13 +53,13 @@ class OrderService:
         return db_order
 
     @staticmethod
-    async def delete(db: Session, id_: int):
+    async def delete(db: Session, id_: int) -> None:
         """Delete order"""
         db.delete(db.query(Order).get(id_))
         db.commit()
 
     @staticmethod
-    async def update(db: Session, order_data):
+    async def update(db: Session, order_data) -> Order:
         """Update order"""
         updated_order = db.merge(order_data)
         db.commit()

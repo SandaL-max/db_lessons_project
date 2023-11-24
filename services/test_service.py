@@ -12,7 +12,9 @@ class TestService:
     """Test Service"""
 
     @staticmethod
-    async def get_join_of_workers_and_orders(db: Session, per_page: int, page: int):
+    async def get_join_of_workers_and_orders(
+        db: Session, per_page: int, page: int
+    ) -> list:
         """Get join of workers and orders"""
         data = (
             db.query(Worker)
@@ -36,7 +38,9 @@ class TestService:
         return result
 
     @staticmethod
-    async def get_orders_count_for_workers(db: Session, per_page: int, page: int):
+    async def get_orders_count_for_workers(
+        db: Session, per_page: int, page: int
+    ) -> list:
         """Get orders count for workers"""
         data = (
             # pylint: disable-next=E1102
@@ -61,7 +65,7 @@ class TestService:
     @staticmethod
     async def get_workers_with_complexity_level(
         db: Session, complexity_level: int, per_page: int, page: int
-    ):
+    ) -> list:
         """Get workers with given comlexity level or bigger than that"""
         subquery = (
             db.query(Order.worker_id)
@@ -86,7 +90,7 @@ class TestService:
         return result
 
     @staticmethod
-    async def update_post(db: Session, new_post: str):
+    async def update_post(db: Session, new_post: str) -> None:
         """Update post of workers, whose real end date is less than deadline date"""
         subquery = (
             db.query(Order.worker_id)
@@ -99,7 +103,7 @@ class TestService:
         db.commit()
 
     @staticmethod
-    async def generate_workers_by_quantity(db: Session, quantity: int):
+    async def generate_workers_by_quantity(db: Session, quantity: int) -> str:
         """Generate some workers"""
         data = await generate_workers(quantity)
         db.add_all(data)
@@ -107,7 +111,7 @@ class TestService:
         return "Create workers was successful"
 
     @staticmethod
-    async def generate_projects_by_quantity(db: Session, quantity: int):
+    async def generate_projects_by_quantity(db: Session, quantity: int) -> str:
         """Generate some projects"""
         data = await generate_projects(quantity)
         db.add_all(data)
@@ -120,7 +124,7 @@ class TestService:
         quantity: int,
         project_id_range: tuple,
         worker_id_range: tuple,
-    ):
+    ) -> str:
         """Generate some workers"""
         data = await generate_orders(quantity, project_id_range, worker_id_range)
         db.add_all(data)
@@ -128,7 +132,7 @@ class TestService:
         return "Create orders was successful"
 
     @staticmethod
-    async def get_salary_median(db: Session):
+    async def get_salary_median(db: Session) -> int:
         """Get median of workers salary"""
         data = db.query(func.round(func.avg(Worker.salary))).scalar()
         return data

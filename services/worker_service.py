@@ -1,5 +1,5 @@
 """Module of Worker controller"""
-from typing import List, Any
+from typing import List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.worker import Worker
@@ -29,7 +29,7 @@ class WorkerService:
         )
 
     @staticmethod
-    async def get_by_id(db: Session, id_: int) -> Any | None:
+    async def get_by_id(db: Session, id_: int) -> Worker | None:
         """Get worker by id"""
         return db.query(Worker).get(id_)
 
@@ -58,7 +58,7 @@ class WorkerService:
         db.commit()
 
     @staticmethod
-    async def update(db: Session, worker_data):
+    async def update(db: Session, worker_data) -> Worker:
         """Update Worker"""
         updated_worker = db.merge(worker_data)
         db.commit()
