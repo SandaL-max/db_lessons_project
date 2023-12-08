@@ -32,6 +32,7 @@ class TestService:
                     "full_name": worker.full_name,
                     "post": worker.post,
                     "salary": worker.salary,
+                    "details": worker.details,
                     "orders": worker.orders,
                 }
             )
@@ -57,6 +58,7 @@ class TestService:
                     "full_name": worker[0].full_name,
                     "post": worker[0].post,
                     "salary": worker[0].salary,
+                    "details": worker[0].details,
                     "orders_count": worker[1],
                 }
             )
@@ -85,6 +87,7 @@ class TestService:
                     "full_name": worker.full_name,
                     "post": worker.post,
                     "salary": worker.salary,
+                    "details": worker.details,
                 }
             )
         return result

@@ -46,7 +46,7 @@ async def generate_order(project_id_range: tuple, worker_id_range: tuple):
     return Order(
         name=fake.company(),
         description=fake.text(),
-        start_date=fake.date_between(start_date="+1d", end_date="+2m"),
+        start_date=fake.date_between(start_date="+1m", end_date="+2m"),
         deadline_date=fake.date_between(start_date="+3m", end_date="+1y"),
         real_end_date=fake.date_between(start_date="+1y", end_date="+2y"),
         complexity_level=fake.random_int(min=1, max=10),
