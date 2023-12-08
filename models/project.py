@@ -26,7 +26,7 @@ class Project(Base):
     index = Index(
         "projects_name_description_idx",
         # pylint: disable-next=E1102
-        func.coalesce(name, "").concat(func.coalesce(description, "")).label("columns"),
+        (name + description).label("columns"),
         postgresql_using="gin",
         postgresql_ops={
             "columns": "gin_trgm_ops",

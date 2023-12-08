@@ -1,7 +1,7 @@
 """JSONB gin index test
 
 Revision ID: 2c968ba0c9ee
-Revises: 0aa16834c563
+Revises: 3614cc5f29ff
 Create Date: 2023-11-20 12:07:55.496175
 
 """
@@ -16,7 +16,7 @@ from models.worker import Worker
 
 # revision identifiers, used by Alembic.
 revision: str = "2c968ba0c9ee"
-down_revision: Union[str, None] = "0aa16834c563"
+down_revision: Union[str, None] = "3614cc5f29ff"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -30,9 +30,6 @@ def upgrade() -> None:
             postgresql.JSONB(none_as_null=True, astext_type=sa.Text()),
             nullable=False,
         ),
-    )
-    op.drop_index(
-        "workers_full_name_post_idx", table_name="workers", postgresql_using="gin"
     )
     op.create_index(
         Worker.index.name,
